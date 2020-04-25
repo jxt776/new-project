@@ -1,5 +1,7 @@
 <template>
-  <h2>分类</h2>
+    <div class="categroy">
+      <h2>分类</h2>
+    </div>
 </template>
 
 <script>
