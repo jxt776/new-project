@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemclick">
-    <img :src="goodsitem.show.img" alt="" @load="imgload">
+    <img :src= "showImage" alt="" @load="imgload">
     <div class="goods-info">
       <p>{{goodsitem.title}}</p>
       <span class="price">{{goodsitem.price}}</span>
@@ -20,6 +20,11 @@ export default {
           }
       }
     },
+    computed:{
+      showImage(){
+        return this.goodsitem.image || this.goodsitem.show.img
+      }
+    },
     methods:{
       imgload(){
         this.$bus.$emit('itemimgload')
@@ -31,7 +36,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .goods-item{
   width: 48%; 
   padding-bottom: 40px;

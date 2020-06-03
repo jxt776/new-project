@@ -13,7 +13,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .backtop{
     position: fixed;
     bottom: 50px;

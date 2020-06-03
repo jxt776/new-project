@@ -31,7 +31,8 @@ export default {
     },
     methods:{
         titleclick(index){
-            this.currentindex = index
+            this.currentindex = index,
+            this.$emit('titleClick',index)
         },
         backclick(){
             this.$router.back()
@@ -40,7 +41,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .title{
     display: flex;
     font-size: 12px;

@@ -4,28 +4,28 @@
       <div slot="center">购物街</div>
     </nav-bar>
     <tab-control :title="['流行','新款','精选']"
-                    @tabclick="tabclick"
+                    @tabclick= "tabclick"
                     ref="tabcontrol1"
-                    v-show="isshowtabcontrol"
+                    v-show= "isshowtabcontrol"
                     class="tab-control"
     ></tab-control>
     <scroll class="content" 
             ref="scroll" 
-            :probe-type="3" 
-            @scroll="contentScroll"
-            :pull-up-load="true"
+            :probe-type= "3" 
+            @scroll= "contentScroll"
+            :pull-up-load= "true"
             @pullingUp = "pullingUp"
             >
-      <home-swiper :banners="banners" @swiperimgload='swiperimgload'></home-swiper>
-      <recommend-view :recommends="recommends"></recommend-view>
+      <home-swiper :banners = "banners" @swiperimgload = 'swiperimgload'></home-swiper>
+      <recommend-view :recommends = "recommends"></recommend-view>
       <feature-view></feature-view>
       <tab-control :title="['流行','新款','精选']"
-                    @tabclick="tabclick"
+                    @tabclick= "tabclick"
                     ref="tabcontrol"
       ></tab-control>
-      <goods-list :goods="showgoods"></goods-list>
+      <goods-list :goods= "showgoods"></goods-list>
     </scroll>
-    <back-top @click.native="backClick" v-show="isShowBack"></back-top>
+    <back-top @click.native= "backClick" v-show= "isShowBack"></back-top>
   </div>
 </template>
 
@@ -45,6 +45,7 @@ import FeatureView from './childcompons/FeatureView'
 //工具类
 import {getHomeMultiData,getHomeGoods} from '@/network/home'
 import {debounce} from '@/common/utils'
+import {ItemListenerMixin,BackTopMixin} from '@/common/mixin'
 
 export default {
   name:'Home',
@@ -71,11 +72,10 @@ export default {
         'sell':{page:0,list:[]},
       },
       currentType:'pop',
-      isShowBack:false,
       isShowTab:false,
       taboffetTop:0,
       isshowtabcontrol:false,
-      saveY:0
+      saveY:0,
     }
   },
   computed:{
@@ -91,20 +91,18 @@ export default {
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
   },
+  mixins:[ItemListenerMixin,BackTopMixin],
   mounted(){
-    //监听图片加载完成
-    const refresh = debounce(this.$refs.scroll.refresh,200)
-
-    this.$bus.$on('itemimgload',()=>{
-        refresh()
-    })
   },
   activated(){
     this.$refs.scroll.scrollTo(0,this.saveY,0)
     this.$refs.scroll.refresh()
   },
   deactivated(){
+    //记录Y值
     this.saveY = this.$refs.scroll.getScrollY()
+    //取消全局事件监听
+    this.$bus.$off('itemimgload',this.itemImgListener)
   }
   ,
   methods:{
@@ -119,9 +117,6 @@ export default {
       contentScroll(position){
         this.isShowBack = (-position.y) > 1000
         this.isshowtabcontrol = (-position.y) > this.taboffetTop
-      },
-      backClick(){
-        this.$refs.scroll.scrollTo(0,0)
       },
       tabclick(index){
         switch (index){

@@ -9,6 +9,7 @@
       <div class="info-list">
           <img v-for="(item, index) in detailinfo.detailImage[0].list" 
                 :src="item" 
+                @load="imgload"
                 :key="index">
       </div>
   </div>
@@ -25,24 +26,24 @@ export default {
             }
         }
     },
-    // data(){
-    //     return{
-    //         counter:0,
-    //         imageslength:0
-    //     }
-    // },
-    // methods:{
-    //     imgload(){
-    //         // if(++this.counter === this.imageslength){
-    //             this.$emit('imageload')
-    //         // }
-    //     }
-    // },
-    // watch:{
-    //     detailinfo(){
-    //         this.imageslength = this.detailinfo.detailImage[0].list.length
-    //     }
-    // }
+    data(){
+        return{
+            counter:0,
+            imageslength:0
+        }
+    },
+    methods:{
+        imgload(){
+             if(++this.counter === this.imageslength){
+                this.$emit('imageload')
+             }
+        }
+    },
+    watch:{
+        detailinfo(){
+            this.imageslength = this.detailinfo.detailImage[0].list.length
+        }
+    }
 }
 </script>
 
